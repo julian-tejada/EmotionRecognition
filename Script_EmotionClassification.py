@@ -156,16 +156,16 @@ OddsCLf1 ['Clase'] = PredicoesClf1
 OddsCLf1 ['Names'] = [ item for elem in prediction_names for item in elem]
 OddsCLf1 ['Prediction'] = prediction_labels
 OddsCLf1 ['Errores'] =  OddsCLf1 ['Clase'] - OddsCLf1 ['Prediction']
-OddsCLf1.to_csv('SVC_DEBOCHE-Melhores.csv', sep=';')
+OddsCLf1.to_csv('SVC_Probabilidades.csv', sep=';')
 
 Errors = OddsCLf1[OddsCLf1.Errores != 0]
-Errors.to_csv('Errores-MelhoresBr-CK-deboche.csv',mode='a', header=False, sep=';')
+Errors.to_csv('Errors.csv',mode='a', header=False, sep=';')
 
         
 cm = confusion_matrix(prediction_labels, PredicoesClf1,normalize='true')
 
 cm_df = pd.DataFrame(cm, index = emotions, columns = emotions)
-cm_df.to_csv('CM-MelhoresBr-CK-deboche.csv',mode='a', header=False, sep=';')
+cm_df.to_csv('CM-Results.csv',mode='a', header=False, sep=';')
 
 
 titles_options = [("Confusion matrix, without normalization", None),
