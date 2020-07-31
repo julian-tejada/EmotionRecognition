@@ -9,7 +9,7 @@ faceDet_four = cv2.CascadeClassifier("haarcascade_frontalface_alt_tree.xml")
 
 def detect_faces():
     files = glob.glob("%s/*" %str(sys.argv[1])) #Get list of all images
-    print files
+    print(files)
     filenumber = 0
     for f in files:
         frame = cv2.imread(f) #Open image
@@ -32,10 +32,10 @@ def detect_faces():
             facefeatures = ""
         #Cut and save face
         for (x, y, w, h) in facefeatures: #get coordinates and size of rectangle containing face
-            print "face found in file: %s" %f
-            filename = f.replace("%s/" %str(sys.argv[1]), "")
+            print("face found in file: %s" %f)
+            filename = f.replace("%s\\" %str(sys.argv[1]), "")
             filename = filename.replace(".jpg", ".png")
-            print "filename %s" %filename
+            print("filename %s" %filename) 
             gray = gray[y-30:y+h+50, x-30:x+w+50] #Cut the frame to size
             try:
                 out = cv2.resize(gray, (350, 350)) #Resize face so all images have same size
@@ -44,4 +44,4 @@ def detect_faces():
                pass #If error, pass file
         filenumber += 1 #Increment image number
 
-detect_faces() #Call functiona
+detect_faces() #Call function
