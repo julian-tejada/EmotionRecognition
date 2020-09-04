@@ -4,7 +4,7 @@
 Script adapted from  http://www.paulvangent.com/2016/08/05/emotion-recognition-using-facial-landmarks/
 Created on Fri Jul 24 10:56:40 2020
 
-@author: Julia Tejada
+@author: Julian Tejada
 
 """
 
@@ -34,7 +34,7 @@ from sklearn.metrics import plot_confusion_matrix
 
 
 
-emotions = [ "disgust", "happiness","surprise"] #Emotion list
+emotions = [ "disgust", "happiness","surprise", "anger", "sadness", "neutral", "fear"] #Emotion list
 # emotions = ["neutral", "disgust" ] #Emotion list
 
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
@@ -44,8 +44,8 @@ clf = SVC(kernel='linear', probability=True, tol=1e-3)#, verbose = True) #Set th
 
 data = {} #Make dictionary for all values
 def get_files(emotion): #Define function to get file list, randomly shuffle it and split 80/20
-    prediction_files_names  = glob.glob("%s/%s/*.png" %(sys.argv[1], emotion))
-    training_files_names  = glob.glob("%s/%s/*.png" %(sys.argv[2], emotion))
+    prediction_files_names  = glob.glob("%s/*.png" %(sys.argv[1]))
+    training_files_names  = glob.glob("%s/%s/*.JPG" %(sys.argv[2], emotion))
     training = training_files_names
     prediction = prediction_files_names
     return training, prediction, training_files_names
@@ -96,7 +96,7 @@ def make_sets():
         print(" working on %s" %emotion)
         training, prediction, names = get_files(emotion)
         names_data.append(names)
-        prediction_names.append(prediction)
+        
         #Append data to training and prediction list, and generate labels 0-7
         for item in training:
             image = cv2.imread(item) #open image
@@ -109,19 +109,19 @@ def make_sets():
             else:
                 training_data.append(data['landmarks_vectorised']) #append image array to training data list
                 training_labels.append(emotions.index(emotion))
-                
-        for item in prediction:
-            image = cv2.imread(item)
-            #print("Image %s" %item)
-            
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            clahe_image = clahe.apply(gray)
-            get_landmarks(clahe_image)
-            if data['landmarks_vectorised'] == "error":
-                print("no face detected on this one")
-            else:
-                prediction_data.append(data['landmarks_vectorised'])
-                prediction_labels.append(emotions.index(emotion))
+    prediction_names.append(prediction)           
+    for item in prediction:
+        image = cv2.imread(item)
+        #print("Image %s" %item)
+        
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        clahe_image = clahe.apply(gray)
+        get_landmarks(clahe_image)
+        if data['landmarks_vectorised'] == "error":
+            print("no face detected on this one")
+        else:
+            prediction_data.append(data['landmarks_vectorised'])
+            prediction_labels.append(emotions.index(emotion))
     return training_data, training_labels, prediction_data, prediction_labels, names_data, prediction_names
 
 accur_lin = []
@@ -152,36 +152,36 @@ ProbabilidadeClf1 = clf1.predict_proba(npar_pred)
 
 
 OddsCLf1 = pd.DataFrame(data=ProbabilidadeClf1,index=range(len(ProbabilidadeClf1)),columns=emotions)
-OddsCLf1 ['Clase'] = PredicoesClf1
+OddsCLf1 ['Classe'] = PredicoesClf1
 OddsCLf1 ['Names'] = [ item for elem in prediction_names for item in elem]
 OddsCLf1 ['Prediction'] = prediction_labels
-OddsCLf1 ['Errores'] =  OddsCLf1 ['Clase'] - OddsCLf1 ['Prediction']
+OddsCLf1 ['Errors'] =  OddsCLf1 ['Classe'] - OddsCLf1 ['Prediction']
 OddsCLf1.to_csv('SVC_Probabilidades.csv', sep=';')
 
-Errors = OddsCLf1[OddsCLf1.Errores != 0]
+Errors = OddsCLf1[OddsCLf1.Errors != 0]
 Errors.to_csv('Errors.csv',mode='a', header=False, sep=';')
 
         
-cm = confusion_matrix(prediction_labels, PredicoesClf1,normalize='true')
+# cm = confusion_matrix(prediction_labels, PredicoesClf1,normalize='true')
 
-cm_df = pd.DataFrame(cm, index = emotions, columns = emotions)
-cm_df.to_csv('CM-Results.csv',mode='a', header=False, sep=';')
+# cm_df = pd.DataFrame(cm, index = emotions, columns = emotions)
+# cm_df.to_csv('CM-Results.csv',mode='a', header=False, sep=';')
 
 
-titles_options = [("Confusion matrix, without normalization", None),
-                  ("Normalized confusion matrix", 'true')]
-for title, normalize in titles_options:
-    disp = plot_confusion_matrix(Classifier1, npar_pred, npar_predlabs, display_labels=emotions, cmap=plt.cm.Blues,normalize=normalize)
-    disp.ax_.set_title(title)
+# titles_options = [("Confusion matrix, without normalization", None),
+#                   ("Normalized confusion matrix", 'true')]
+# for title, normalize in titles_options:
+#     disp = plot_confusion_matrix(Classifier1, npar_pred, npar_predlabs, display_labels=emotions, cmap=plt.cm.Blues,normalize=normalize)
+#     disp.ax_.set_title(title)
 
-    print(title)
-    print(disp.confusion_matrix)
+#     print(title)
+#     print(disp.confusion_matrix)
 
-plt.show()
+# plt.show()
 
-pl.matshow(cm)
-pl.title('Confusion matrix of the classifier')
-pl.colorbar()
-pl.show()
+# pl.matshow(cm)
+# pl.title('Confusion matrix of the classifier')
+# pl.colorbar()
+# pl.show()
 
 # sns.heatmap(cm.T, square=True, annot=True, fmt='d', cbar=False)
