@@ -43,12 +43,12 @@ predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat") #Or se
 clf = SVC(kernel='linear', probability=True, tol=1e-3)#, verbose = True) #Set the classifier as a support vector machines with polynomial kernel
 
 data = {} #Make dictionary for all values
-def get_files(emotion): #Define function to get file list, randomly shuffle it and split 80/20
+def get_files(): #Define function to get file list, randomly shuffle it and split 80/20
     prediction_files_names  = glob.glob("%s/*.png" %(sys.argv[1]))
-    training_files_names  = glob.glob("%s/%s/*.JPG" %(sys.argv[2], emotion))
-    training = training_files_names
+    # training_files_names  = glob.glob("%s/%s/*.png" %(sys.argv[2], emotion))
+    # training = training_files_names
     prediction = prediction_files_names
-    return training, prediction, training_files_names
+    return prediction
 def get_landmarks(image):
     detections = detector(image, 1)
     for k,d in enumerate(detections): #For all detected face instances individually
@@ -84,31 +84,31 @@ def get_landmarks(image):
     if len(detections) < 1:
         data['landmarks_vestorised'] = "error"
 def make_sets():
-    training_data = []
-    training_labels = []
+    # training_data = []
+    # training_labels = []
     prediction_data = []
     prediction_labels = []
     prediction_names = []
     names_data = []
+    prediction = get_files()
     
-    
-    for emotion in emotions:
-        print(" working on %s" %emotion)
-        training, prediction, names = get_files(emotion)
-        names_data.append(names)
+    # for emotion in emotions:
+    #     print(" working on %s" %emotion)
+    #     
+    #     names_data.append(names)
         
-        #Append data to training and prediction list, and generate labels 0-7
-        for item in training:
-            image = cv2.imread(item) #open image
-            print(" working on image %s" %item)
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #convert to grayscale
-            clahe_image = clahe.apply(gray)
-            get_landmarks(clahe_image)
-            if data['landmarks_vectorised'] == "error":
-                print("no face detected on this one")
-            else:
-                training_data.append(data['landmarks_vectorised']) #append image array to training data list
-                training_labels.append(emotions.index(emotion))
+    #     #Append data to training and prediction list, and generate labels 0-7
+    #     for item in training:
+    #         image = cv2.imread(item) #open image
+    #         print(" working on image %s" %item)
+    #         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #convert to grayscale
+    #         clahe_image = clahe.apply(gray)
+    #         get_landmarks(clahe_image)
+    #         if data['landmarks_vectorised'] == "error":
+    #             print("no face detected on this one")
+    #         else:
+    #             training_data.append(data['landmarks_vectorised']) #append image array to training data list
+    #             training_labels.append(emotions.index(emotion))
     prediction_names.append(prediction)           
     for item in prediction:
         image = cv2.imread(item)
@@ -121,16 +121,16 @@ def make_sets():
             print("no face detected on this one")
         else:
             prediction_data.append(data['landmarks_vectorised'])
-            prediction_labels.append(emotions.index(emotion))
-    return training_data, training_labels, prediction_data, prediction_labels, names_data, prediction_names
+            # prediction_labels.append(emotions.index(emotion))
+    return  prediction_data
 
 accur_lin = []
 
 
 print("Making sets " ) #Make sets by random sampling 80/20%
-training_data, training_labels, prediction_data, prediction_labels, names_data, prediction_names = make_sets()
-npar_train = np.array(training_data) #Turn the training set into a numpy array for the classifier
-npar_trainlabs = np.array(training_labels)
+prediction_data = make_sets()
+npar_train = np.load(sys.argv[2]) #Turn the training set into a numpy array for the classifier
+npar_trainlabs = np.load(sys.argv[3])
 print("training SVM linear " ) #train SVM
 clf1 = SVC(kernel='linear', probability=True, C=10)#, verbose = True) #Set the classifier as a support vector machines with polynomial kernel
 
@@ -162,26 +162,3 @@ Errors = OddsCLf1[OddsCLf1.Errors != 0]
 Errors.to_csv('Errors.csv',mode='a', header=False, sep=';')
 
         
-# cm = confusion_matrix(prediction_labels, PredicoesClf1,normalize='true')
-
-# cm_df = pd.DataFrame(cm, index = emotions, columns = emotions)
-# cm_df.to_csv('CM-Results.csv',mode='a', header=False, sep=';')
-
-
-# titles_options = [("Confusion matrix, without normalization", None),
-#                   ("Normalized confusion matrix", 'true')]
-# for title, normalize in titles_options:
-#     disp = plot_confusion_matrix(Classifier1, npar_pred, npar_predlabs, display_labels=emotions, cmap=plt.cm.Blues,normalize=normalize)
-#     disp.ax_.set_title(title)
-
-#     print(title)
-#     print(disp.confusion_matrix)
-
-# plt.show()
-
-# pl.matshow(cm)
-# pl.title('Confusion matrix of the classifier')
-# pl.colorbar()
-# pl.show()
-
-# sns.heatmap(cm.T, square=True, annot=True, fmt='d', cbar=False)
