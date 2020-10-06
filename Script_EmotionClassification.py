@@ -34,7 +34,7 @@ from sklearn.metrics import plot_confusion_matrix
 
 
 
-emotions = [ "disgust", "happiness","surprise", "anger", "sadness", "neutral", "fear"] #Emotion list
+emotions = [ "disgust", "happiness","surprise", "anger", "sadness", "neutral", "fear", "deboche"] #Emotion list
 # emotions = ["neutral", "disgust" ] #Emotion list
 
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
@@ -122,25 +122,25 @@ def make_sets():
         else:
             prediction_data.append(data['landmarks_vectorised'])
             # prediction_labels.append(emotions.index(emotion))
-    return  prediction_data
+    return  prediction_data, prediction_names
 
 accur_lin = []
 
 
 print("Making sets " ) #Make sets by random sampling 80/20%
-prediction_data = make_sets()
+prediction_data, prediction_names = make_sets()
 npar_train = np.load(sys.argv[2]) #Turn the training set into a numpy array for the classifier
 npar_trainlabs = np.load(sys.argv[3])
 print("training SVM linear " ) #train SVM
 clf1 = SVC(kernel='linear', probability=True, C=10)#, verbose = True) #Set the classifier as a support vector machines with polynomial kernel
 
-npar_train = np.array(training_data) #Turn the training set into a numpy array for the classifier
-npar_trainlabs = np.array(training_labels)
+#npar_train = np.array(training_data) #Turn the training set into a numpy array for the classifier
+#npar_trainlabs = np.array(training_labels)
 npar_pred = np.array(prediction_data)
-npar_predlabs = np.array(prediction_labels)
+#npar_predlabs = np.array(prediction_labels)
 
 
-Classifier1 = clf1.fit(npar_train, training_labels)
+Classifier1 = clf1.fit(npar_train, npar_trainlabs)
 
 
 # predictions
@@ -154,11 +154,11 @@ ProbabilidadeClf1 = clf1.predict_proba(npar_pred)
 OddsCLf1 = pd.DataFrame(data=ProbabilidadeClf1,index=range(len(ProbabilidadeClf1)),columns=emotions)
 OddsCLf1 ['Classe'] = PredicoesClf1
 OddsCLf1 ['Names'] = [ item for elem in prediction_names for item in elem]
-OddsCLf1 ['Prediction'] = prediction_labels
-OddsCLf1 ['Errors'] =  OddsCLf1 ['Classe'] - OddsCLf1 ['Prediction']
+#OddsCLf1 ['Prediction'] = prediction_labels
+#OddsCLf1 ['Errors'] =  OddsCLf1 ['Classe'] - OddsCLf1 ['Prediction']
 OddsCLf1.to_csv('SVC_Probabilidades.csv', sep=';')
 
-Errors = OddsCLf1[OddsCLf1.Errors != 0]
-Errors.to_csv('Errors.csv',mode='a', header=False, sep=';')
+#Errors = OddsCLf1[OddsCLf1.Errors != 0]prediction_labels
+#Errors.to_csv('Errors.csv',mode='a', header=False, sep=';')
 
         
