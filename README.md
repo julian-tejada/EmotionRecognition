@@ -12,7 +12,7 @@ The code is divided in three scripts, which represent the three necessary steps 
 `python ScriptExtractingFaces.py <Source images path> <Destination path (Faces B&W images)>` 
 
 ## To classify 
-`python Script_EmotionClassification.py <Source images path> <dataset file (npy)>`
+`python Script_EmotionClassification.py <Source images path> <dataset train (npy)> <dataset labels (npy)>`
 
 The second and third scripts need the landkmarks descriptions find in the next files
 1. From the dlib project the  [Shape predictor 69 face landmarks](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2)
