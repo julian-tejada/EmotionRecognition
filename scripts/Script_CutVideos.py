@@ -8,6 +8,7 @@ Script adapted from
 """
 
 
+import argparse  # module used to parse command line arguments
 import cv2  # still used to save images out
 import os
 import sys
@@ -15,8 +16,26 @@ import numpy as np
 from decord import VideoReader
 from decord import cpu, gpu
 
+# Parsing
 
-def extract_frames(video_path, frames_dir, overwrite=False, start=-1, end=-1, every=1):
+# Arguments provided in command line will essentially be the parameters of extract_frames()
+
+# Positional (mandatory) arguments
+parser = argparse.ArgumentParser(description="cut a video into B&W png images")
+parser.add_argument("path", help="path of the video (e.g.: ./videos/example.mp4)")
+parser.add_argument("dir", help="folder where images will be saved (e.g.: ./images)")
+
+# Optional arguments
+parser.add_argument("-o", "--overwrite", action="store_true", help="enable image overwriting")
+parser.add_argument("--start", type=int, default=-1, help="start frame")
+parser.add_argument("--end", type=int, default=-1, help="end frame")
+parser.add_argument("--every", type=int, default=1, help="frame spacing")
+
+# Parse arguments
+args = parser.parse_args()
+
+# Since default parameters are already set using argparse, there's no need for it in a function's definition
+def extract_frames(video_path, frames_dir, overwrite, start, end, every):
     """
     Extract frames from a video using decord's VideoReader
     :param video_path: path of the video
@@ -36,8 +55,12 @@ def extract_frames(video_path, frames_dir, overwrite=False, start=-1, end=-1, ev
     video_dir, video_filename = os.path.split(video_path)  # get the video path and filename from the path
     # video_dir, video_filename = os.path.split("/home/julan/Downloads/Temporal")
     
-    
-    assert os.path.exists(video_path)  # assert the video file exists
+    # return video_path, video_dir, video_filename
+    try:
+        assert os.path.exists(video_path)  # assert the video file exists
+    except AssertionError:
+        print("Error loading file on path '{}'".format(args.path))
+
 
     # load the VideoReader
     vr = VideoReader(video_path, ctx=cpu(0))  # can set to cpu or gpu .. ctx=gpu(0)
@@ -72,7 +95,6 @@ def extract_frames(video_path, frames_dir, overwrite=False, start=-1, end=-1, ev
     return saved_count  # and return the count of the images we saved
 
 
-extract_frames(sys.argv[1], sys.argv[2], True, int(sys.argv[3]), int(sys.argv[4]),1)
+# Call function using argparse
 
-
-# 
+extract_frames(args.path, args.dir, args.overwrite, args.start, args.end, args.every)
