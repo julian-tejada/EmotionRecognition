@@ -3,10 +3,12 @@
 """
 Created on Tue Oct 20 13:25:54 2020
 
-@author: julan
+@author: julian-tejada
+@author: gabesness
 """
 
-
+# from os import listdir
+# from os.path import isfile, join
 import numpy as np
 import pandas as pd
 from sklearn.svm import SVC
@@ -91,6 +93,9 @@ sadnessFACS = sadness[["AU01_r","AU02_r","AU04_r","AU05_r","AU06_r","AU07_r","AU
 
 
 surpriseFACS = surprise[["AU01_r","AU02_r","AU04_r","AU05_r","AU06_r","AU07_r","AU09_r","AU10_r","AU12_r","AU14_r","AU15_r","AU17_r","AU20_r","AU23_r","AU25_r","AU26_r","AU45_r","AU01_c","AU02_c","AU04_c","AU05_c","AU06_c","AU07_c","AU09_c","AU10_c","AU12_c","AU14_c","AU15_c","AU17_c","AU20_c","AU23_c","AU25_c","AU26_c","AU28_c","AU45_c"]]
+
+
+
 
 
 # divide os bancos de cada emoção em 80% e 20%, o primeiro para treino o segundo para teste
@@ -343,7 +348,7 @@ cm = confusion_matrix(labelsFACS_test, PredicoesClf1,normalize='true')
 pl.matshow(cm)
 pl.title('Confusion matrix of the classifier')
 pl.colorbar()
-pl.show()
+pl.show() # foto sem nada?
 
 
 pl.figure(figsize=(5.5,4))
@@ -361,27 +366,4 @@ for title, normalize in titles_options:
 
     print(title)
     print(disp.confusion_matrix)
-
-# emotions = [ "anger","deboche","disgust", "fear", "happiness", "neutral", "sadness","surprise"] #Emotion list
-
-# OddsCLf1 = pd.DataFrame(data=ProbabilidadeClf1,index=range(len(ProbabilidadeClf1)),columns=emotions)
-# OddsCLf1 ['Classe'] = PredicoesClf1
-# OddsCLf1 ['Names'] = np.arange(0,OddsCLf1.shape[0])
-# #OddsCLf1 ['Prediction'] = prediction_labels
-# #OddsCLf1 ['Errors'] =  OddsCLf1 ['Classe'] - OddsCLf1 ['Prediction']
-# OddsCLf1.to_csv('SVC_Probabilidades.csv', sep=';')
-
-# # Teste das FACS
-# PredicoesClf2 = clf2.predict(npar_predict2)
-# # probabilities
-# ProbabilidadeClf2 = clf2.predict_proba(npar_predict2)
-
-
-
-# OddsCLf2 = pd.DataFrame(data=ProbabilidadeClf2,index=range(len(ProbabilidadeClf2)),columns=emotions)
-# OddsCLf2 ['Classe'] = PredicoesClf2
-# OddsCLf2 ['Names'] = np.arange(0,OddsCLf2.shape[0])
-# #OddsCLf1 ['Prediction'] = prediction_labels
-# #OddsCLf1 ['Errors'] =  OddsCLf1 ['Classe'] - OddsCLf1 ['Prediction']
-# OddsCLf2.to_csv('SVC_Probabilidades2.csv', sep=';')
     
