@@ -1,0 +1,10 @@
+Input:/home/julan/ownCloud/FederalSergipe/Projetos/Raquel/Emocoes/VideosBrasil/VideosColombia/Subject72.mp4
+Input full path:/home/julan/ownCloud/FederalSergipe/Projetos/Raquel/Emocoes/VideosBrasil/VideosColombia/Subject72.mp4
+Camera parameters:1312.5,1312.5,960,540
+Output csv:Subject72.csv
+Gaze: 0
+AUs: 1
+Landmarks 2D: 0
+Landmarks 3D: 0
+Pose: 0
+Shape parameters: 0

@@ -1,0 +1,33 @@
+Overall details and changes made in the project files
+
+Total subjects:
+31 Brazilian
+51 Colombian
+82 Total
+
+Brazilian database:
+Fixed row: xxxx (10.59 -> 10, 59)
+
+Colombian database:
+Unused file: Tempos25co_s1 - incomplete data
+Unused file: Tempos25co_s2 - incomplete data
+Subject to be removed: 25
+Unused file: Tempos27co_s1 - incomplete data
+Unused file: Tempos27co_s2 - incomplete data
+Subject to be removed: 27
+Unused file: Tempos29co_s1 - incomplete data
+Unused file: Tempos29co_s2 - incomplete data
+Subject to be removed: 29
+Unused file: Tempos14co_s1 - incomplete data
+Unused file: Tempos14co_s2 - incomplete data
+Subject to be removed: 14
+Unused file: Tempos17co_s1 - incomplete data
+Unused file: Tempos17co_s2 - incomplete data
+Subject to be removed: 17
+Unused file: Tempos48co_s1 - incomplete data
+Unused file: Tempos48co_s2 - incomplete data
+Subject to be removed: 48
+
+Fixed row: Tempos80co_s1 (3.06 -> 3, 6)
+Fixed row: Tempos56co_s2 (10.29 -> 10, 29)
+Fixed row: Tempos58co_s2 (10.04 -> 10, 4; 10.35 -> 10, 35)

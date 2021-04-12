@@ -163,7 +163,7 @@ def classifier(n, k, c):
 
     pl.matshow(cm)
     pl.title("Heat map of: " + selection)
-    #pl.colorbar()
+    pl.colorbar()
     pl.show()
     
     return cm
