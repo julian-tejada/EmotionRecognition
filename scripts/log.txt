@@ -1,5 +1,12 @@
 Overall details and changes made in the project files
 
+To do:
+Handling of time files OK
+Selecting specified interval from subject files OK
+Set up AU combinations
+Check for AU presence/intensity
+Select best frames
+
 Total subjects:
 31 Brazilian
 51 Colombian
@@ -7,27 +14,40 @@ Total subjects:
 
 Brazilian database:
 Fixed row: xxxx (10.59 -> 10, 59)
+Unused file: 30nando22.csv - no timestamp file provided
+Subject removed: 30
 
 Colombian database:
 Unused file: Tempos25co_s1 - incomplete data
 Unused file: Tempos25co_s2 - incomplete data
-Subject to be removed: 25
+Unused file: Subject25.csv
+Subject removed: 25
 Unused file: Tempos27co_s1 - incomplete data
 Unused file: Tempos27co_s2 - incomplete data
-Subject to be removed: 27
+Unused file: Subject27.csv
+Subject removed: 27
 Unused file: Tempos29co_s1 - incomplete data
 Unused file: Tempos29co_s2 - incomplete data
-Subject to be removed: 29
+Unused file: Subject29.csv
+Subject removed: 29
 Unused file: Tempos14co_s1 - incomplete data
 Unused file: Tempos14co_s2 - incomplete data
-Subject to be removed: 14
+Unused file: Subject14.csv
+Subject removed: 14
 Unused file: Tempos17co_s1 - incomplete data
 Unused file: Tempos17co_s2 - incomplete data
-Subject to be removed: 17
+Unused file: Subject17.csv
+Subject removed: 17
 Unused file: Tempos48co_s1 - incomplete data
 Unused file: Tempos48co_s2 - incomplete data
-Subject to be removed: 48
+Unused file: Subject48.csv
+Subject removed: 48
 
 Fixed row: Tempos80co_s1 (3.06 -> 3, 6)
 Fixed row: Tempos56co_s2 (10.29 -> 10, 29)
 Fixed row: Tempos58co_s2 (10.04 -> 10, 4; 10.35 -> 10, 35)
+
+Actual subjects:
+31 Brazilian
+45 Colombian
+75 Total
