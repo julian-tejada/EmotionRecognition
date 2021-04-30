@@ -77,13 +77,13 @@ posicoes_emocoes = {
 #print(pd.DataFrame(posicoes_emocoes))
 
 intervalos_au = {
-    "alegria": ["AU06", "AU12"],
-    "nojo": ["AU09", "AU15"], # missing AU16
-    "tristeza": ["AU01", "AU04", "AU15"],
-    "deboche": ["AU12", "AU14"],
-    "raiva": ["AU04", "AU05", "AU07", "AU23"],
-    "surpresa": ["AU01", "AU02", "AU05", "AU26"],
-    "medo": ["AU01", "AU02", "AU04", "AU05", "AU07", "AU20", "AU26"]
+    "alegria": ["AU06_c", "AU06_r", "AU12_c", "AU12_r"],
+    "nojo": ["AU09_c", "AU09_r", "AU15_c", "AU15_r"], # missing AU16
+    "tristeza": ["AU01_c", "AU01_r", "AU04_c", "AU04_r", "AU15_c", "AU15_r"],
+    "deboche": ["AU12_c", "AU12_r", "AU14_c", "AU14_r"],
+    "raiva": ["AU04_c", "AU04_r", "AU05_c", "AU05_r", "AU07_c", "AU07_r", "AU23_c", "AU23_r"],
+    "surpresa": ["AU01_c", "AU01_r", "AU02_c", "AU02_r", "AU05_c", "AU05_r", "AU26_c", "AU26_r"],
+    "medo": ["AU01_c", "AU01_r", "AU02_c", "AU02_r", "AU04_c", "AU04_r", "AU05_c", "AU05_r", "AU07_c", "AU07_r", "AU20_c", "AU20_r", "AU26_c", "AU26_r"]
 }
 
 # HANDLING OF TIME FILES
@@ -145,20 +145,23 @@ def select_interval(table):
         int1 = temp.loc[(temp["timestamp"] >= t1) & (temp["timestamp"] < t1 + 7)] # intervalo da sessao 1
         int2 = temp.loc[(temp["timestamp"] >= t2) & (temp["timestamp"] < t2 + 7)] # intervalo da sessao 2
         intervalo = pd.concat([int1, int2]) # intervalo total da emocao
-        print(intervalo)
+        #print(intervalo)
         intervalos.append(intervalo)
 
     return intervalos
 
 
 def select_frames(lista, emotion):
+    cols = ["frame", "timestamp"]
+    cols += intervalos_au[emotion]
+    print(cols)
     for i in lista:
-        temp = i.columns
+        temp = i.loc[:, cols]
         print(temp)
 
 
 
 
 #main(args.database, args.emotion)
-select_interval(main(args.database, args.emotion))
-#select_frames(select_interval(main(args.database, args.emotion)), args.emotion)
+#select_interval(main(args.database, args.emotion))
+select_frames(select_interval(main(args.database, args.emotion)), args.emotion)
