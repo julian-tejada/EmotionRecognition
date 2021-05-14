@@ -77,13 +77,13 @@ posicoes_emocoes = {
 #print(pd.DataFrame(posicoes_emocoes))
 
 intervalos_au = {
-    "alegria": ["AU06_c", "AU06_r", "AU12_c", "AU12_r"],
-    "nojo": ["AU09_c", "AU09_r", "AU15_c", "AU15_r"], # missing AU16
-    "tristeza": ["AU01_c", "AU01_r", "AU04_c", "AU04_r", "AU15_c", "AU15_r"],
-    "deboche": ["AU12_c", "AU12_r", "AU14_c", "AU14_r"],
-    "raiva": ["AU04_c", "AU04_r", "AU05_c", "AU05_r", "AU07_c", "AU07_r", "AU23_c", "AU23_r"],
-    "surpresa": ["AU01_c", "AU01_r", "AU02_c", "AU02_r", "AU05_c", "AU05_r", "AU26_c", "AU26_r"],
-    "medo": ["AU01_c", "AU01_r", "AU02_c", "AU02_r", "AU04_c", "AU04_r", "AU05_c", "AU05_r", "AU07_c", "AU07_r", "AU20_c", "AU20_r", "AU26_c", "AU26_r"]
+    "alegria": [ "AU06_r", "AU12_r"],
+    "nojo": [ "AU09_r", "AU15_r"], # missing AU16
+    "tristeza": ["AU01_r", "AU04_r", "AU15_r"],
+    "deboche": ["AU12_r", "AU14_r"],
+    "raiva": ["AU04_r", "AU05_r", "AU07_r", "AU23_r"],
+    "surpresa": ["AU01_r", "AU02_r", "AU05_r", "AU26_r"],
+    "medo": ["AU01_r", "AU02_r", "AU04_r", "AU05_r", "AU07_r", "AU20_r", "AU26_r"]
 }
 
 # HANDLING OF TIME FILES
@@ -157,7 +157,12 @@ def select_frames(lista, emotion):
     print(cols)
     for i in lista:
         temp = i.loc[:, cols]
-        print(temp)
+        #temp["product"] = temp[intervalos_au[emotion]].product(axis=1)
+        temp["average"] = temp[intervalos_au[emotion]].mean(axis=1)
+        temp["desv_pad"] = temp[intervalos_au[emotion]].std(axis=1)
+        temp["avg / std"] = (temp["average"] / temp["desv_pad"])
+        k = temp.sort_values(by="avg / std", ascending=False)
+        print(k)
 
 
 
