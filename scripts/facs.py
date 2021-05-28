@@ -125,9 +125,11 @@ def main(database, emotion):
 
 # SELECIONAR INTERVALOS DOS ARQUIVOS CSV DOS PARTICIPANTES
 
-def select_interval(table):
+def select_interval(table, emotion):
     intervalos = []
+    subjects = []
     for s in subs:
+        subjects.append(s)
         fpath = dir_subjects + "/" + s
         #print(s)
         if args.database == "br":
@@ -148,25 +150,37 @@ def select_interval(table):
         #print(intervalo)
         intervalos.append(intervalo)
 
-    return intervalos
-
-
-def select_frames(lista, emotion):
     cols = ["frame", "timestamp"]
     cols += intervalos_au[emotion]
-    print(cols)
-    for i in lista:
+    #print(cols)
+    #best_frames = []
+    for i, j in zip(intervalos, subjects):
         temp = i.loc[:, cols]
         #temp["product"] = temp[intervalos_au[emotion]].product(axis=1)
         temp["average"] = temp[intervalos_au[emotion]].mean(axis=1)
         temp["desv_pad"] = temp[intervalos_au[emotion]].std(axis=1)
-        temp["avg / std"] = (temp["average"] / temp["desv_pad"])
-        k = temp.sort_values(by="avg / std", ascending=False)
-        print(k)
+        temp["avg - std"] = (temp["average"] - 0.5*temp["desv_pad"])
+        k = temp.sort_values(by="avg - std", ascending=False)
+        #print(k)
+        frames = k.head().loc[:, "frame"]
+        #best_frames.append((j, frames))
+        print(j + ": ")
+        print(frames)
+        print('\n')
+    #print(best_frames)
+
+    #return intervalos
+
+
+#def select_frames(lista, emotion):
+
+
+
 
 
 
 
 #main(args.database, args.emotion)
 #select_interval(main(args.database, args.emotion))
-select_frames(select_interval(main(args.database, args.emotion)), args.emotion)
+
+select_interval(main(args.database, args.emotion), args.emotion)
