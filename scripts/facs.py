@@ -144,30 +144,38 @@ def select_interval(table, emotion):
         #print(t1)
         #print(t2)
         temp = pd.read_csv(fpath)
-        int1 = temp.loc[(temp["timestamp"] >= t1) & (temp["timestamp"] < t1 + 7)] # intervalo da sessao 1
-        int2 = temp.loc[(temp["timestamp"] >= t2) & (temp["timestamp"] < t2 + 7)] # intervalo da sessao 2
+        int1 = temp.loc[(temp["timestamp"] >= t1) & (temp["timestamp"] <= t1 + 7)] # intervalo da sessao 1
+        int2 = temp.loc[(temp["timestamp"] >= t2) & (temp["timestamp"] <= t2 + 7)] # intervalo da sessao 2
         intervalo = pd.concat([int1, int2]) # intervalo total da emocao
         #print(intervalo)
+        #print(intervalo)
         intervalos.append(intervalo)
+        #time.sleep(1)
 
     cols = ["frame", "timestamp"]
     cols += intervalos_au[emotion]
     #print(cols)
-    #best_frames = []
+    best_frames = []
     for i, j in zip(intervalos, subjects):
         temp = i.loc[:, cols]
-        #temp["product"] = temp[intervalos_au[emotion]].product(axis=1)
-        temp["average"] = temp[intervalos_au[emotion]].mean(axis=1)
+        temp["avg"] = temp[intervalos_au[emotion]].mean(axis=1)
         temp["desv_pad"] = temp[intervalos_au[emotion]].std(axis=1)
-        temp["avg - std"] = (temp["average"] - 0.5*temp["desv_pad"])
-        k = temp.sort_values(by="avg - std", ascending=False)
+        temp["avg - 0.5*std"] = (temp["avg"] - 0.5*temp["desv_pad"])
+        # Descomente a linha abaixo para calcular os frames usando a equacao
+        #k = temp.sort_values(by="avg - 0.5*std", ascending=False).head()
+        # Descomente a linha abaixo para calcular os frames usando o nlargest do pandas
+        k = temp.nlargest(5, intervalos_au[emotion], keep="all").sort_values(intervalos_au[emotion], ascending=False)
+        # Descomente as duas linhas abaixo para imprimir as tabelas com os detalhes
         #print(k)
+        #print("\n")
         frames = k.head().loc[:, "frame"]
-        #best_frames.append((j, frames))
+        best_frames.append((j, frames))
+        # Descomente as tres linhas abaixo para imprimir apenas os frames por participante
         print(j + ": ")
         print(frames)
         print('\n')
     #print(best_frames)
+
 
     #return intervalos
 
@@ -180,7 +188,7 @@ def select_interval(table, emotion):
 
 
 
-#main(args.database, args.emotion)
+#print(main(args.database, args.emotion))
 #select_interval(main(args.database, args.emotion))
 
 select_interval(main(args.database, args.emotion), args.emotion)

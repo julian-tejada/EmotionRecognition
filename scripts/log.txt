@@ -51,3 +51,7 @@ Actual subjects:
 31 Brazilian
 45 Colombian
 75 Total
+
+ISSUES
+#1 - Frame selection outside of specified intervals FIXED
+#2 - Some csv files have half the amount of frames they should have (0.000 -> 0.067) FIXED
